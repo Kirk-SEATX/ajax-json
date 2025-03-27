@@ -28,7 +28,7 @@
     console.log("$form", $form);
   }
 
-  // TODO: In the requestImages function, make an AJAX request for JSONP data
+  // TODO DONE: In the requestImages function, make an AJAX request for JSONP data
   // and append the item descriptions (which include images) into the #images
   // HTML element.
   // See the example called "Loads the four most recent pictures of Mount
@@ -73,14 +73,15 @@
       .addClass("iconoir-wifi spin");
     // TODO: Write your code after this line in this requestImages function
 
-    // bind flickrUrl to flickrAPI url for readability
+    // bind the user input to $searchTags
     var $searchTags = $("#searchTags").val();
+    //  bind the images dive to $images
     var $images = $("#images");
+    // bind flickrUrl to flickrAPI url for readability
     var flickrURL =
       "https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
     $.getJSON(flickrURL, {
       // tags comes from input to $searchTags
-      // TODO: write the get value from searchTags
       tags: $searchTags,
       tagmode: "any",
       format: "json",
@@ -88,7 +89,7 @@
       .done(function (data) {
         //  empty the images div
         $images.empty();
-        // look through the data returned from flickr
+        // loop through the data returned from flickr
         $.each(data.items, function (i, item) {
           // append a new div for each image and a description to each div
           $("#images").append($("<div>").append(item.description));
@@ -101,13 +102,14 @@
         $submiticon.removeClass("iconoir-wifi spin").addClass("iconoir-search");
       })
       .fail(function () {
+        // on fail log a message and show wifi off to indicate to user there is an error
         console.log("Search failed");
         $submiticon.removeClass("spin").addClass("iconoir-wifi-off");
       });
   };
 
   if ($form) {
-    // TODO MAYBE: Bind the submit event to a function that prevents
+    // TODO DONE: Bind the submit event to a function that prevents
     // the default action
     // and then calls the requestImages function.
     $form.on("submit", function (event) {

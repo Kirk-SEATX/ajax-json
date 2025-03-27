@@ -18,7 +18,6 @@
 /*eslint-env jquery */
 /*eslint-env browser*/
 /*eslint no-console: 0*/
-
 (function () {
   "use strict";
   // The DOM is now loaded and can be manipulated
@@ -68,30 +67,43 @@
   // search of Flickr failed.
   var requestImages = function () {
     var $submiticon = $("#submiticon");
+    // if user submit make the icon switch to wifi and spin
     $submiticon
       .removeClass("iconoir-wifi-off iconoir-search")
       .addClass("iconoir-wifi spin");
     // TODO: Write your code after this line in this requestImages function
 
     // bind flickrUrl to flickrAPI url for readability
-    flickrURL =
+    var $searchTags = $("#searchTags").val();
+    var $images = $("#images");
+    var flickrURL =
       "https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
     $.getJSON(flickrURL, {
-      // replace with $serachTags
-      tags: "swollen areolas",
-      // what does this do?
+      // tags comes from input to $searchTags
+      // TODO: write the get value from searchTags
+      tags: $searchTags,
       tagmode: "any",
       format: "json",
     })
       .done(function (data) {
-		$.each(data.items, function(item) {
-			
-		})
-	  })
-      .fail(
-		console.log("Search failed");
-		$("#submiticon").removeClass("spin").addClass("wifi-off");
-	  )
+        //  empty the images div
+        $images.empty();
+        // look through the data returned from flickr
+        $.each(data.items, function (i, item) {
+          // append a new div for each image and a description to each div
+          $("#images").append($("<div>").append(item.description));
+        });
+        // set all links to open in a new page
+        $("#images a").attr("target", "_blank");
+        // add flickrimage class to all images
+        $("img").addClass("flickrimage");
+        // if results have returned remove the wifi icon and stop spin show the search icon
+        $submiticon.removeClass("iconoir-wifi spin").addClass("iconoir-search");
+      })
+      .fail(function () {
+        console.log("Search failed");
+        $submiticon.removeClass("spin").addClass("iconoir-wifi-off");
+      });
   };
 
   if ($form) {
@@ -106,12 +118,13 @@
       // using the event parameter
       event.preventDefault();
       if (event) {
+        // TODO DONE: Call the requestImages function
+        requestImages();
       }
-      // TODO DONE: Call the requestImages function
-      requestImages();
 
-      // TODO: return false (the old way of preventing the default
+      // TODO DONE: return false (the old way of preventing the default
       // behavior of the form submit event)
+      return false;
     });
 
     // Make the initial AJAX request as the page loads

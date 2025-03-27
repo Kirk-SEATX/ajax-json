@@ -92,12 +92,12 @@
         // loop through the data returned from flickr
         $.each(data.items, function (i, item) {
           // append a new div for each image and a description to each div
-          $("#images").append($("<div>").append(item.description));
+          $($images).append($("<div>").append(item.description));
         });
         // set all links to open in a new page
-        $("#images a").attr("target", "_blank");
+        $images.find("a").attr("target", "_blank");
         // add flickrimage class to all images
-        $("img").addClass("flickrimage");
+        $images.find("img").addClass("flickrimage");
         // if results have returned remove the wifi icon and stop spin show the search icon
         $submiticon.removeClass("iconoir-wifi spin").addClass("iconoir-search");
       })
